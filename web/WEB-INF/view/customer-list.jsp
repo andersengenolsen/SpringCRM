@@ -30,14 +30,17 @@
     <h3 class="text-center text-white pt-5">SpringCRM Application</h3>
     <div class="row">
         <div class="col-md-12">
+            <!-- Logged in as -->
             <p class="text-light font-weight-bold float-left">Logged in as: <security:authentication
                     property="principal.username"/></p>
             <!-- Link to Admin panel, only visibile for admin users -->
             <security:authorize access="hasRole('admin')">
-                <a href="${pageContext.request.contextPath}/admin" class="btn btn-primary btn-info btn-lg float-right">Admin panel</a>
+                <a href="${pageContext.request.contextPath}/admin" class="btn btn-primary btn-info btn-lg float-right">Admin
+                    panel</a>
             </security:authorize>
         </div>
         <div class="col-md-12">
+            <!-- Displaying user role -->
             <p class="text-light font-weight-bold">User role: <security:authentication
                     property="principal.authorities"/></p>
         </div>

@@ -53,10 +53,6 @@
                                 id="remember-me" name="remember-me" type="checkbox"></span></label><br>
                         <input type="submit" name="submit" class="btn btn-info btn-md" value="SUBMIT">
                     </div>
-                    <!-- Registration link -->
-                    <div id="register-link" class="text-right">
-                        <a href="#" class="text-white">Register here</a>
-                    </div>
                 </form:form>
             </div>
         </div>
