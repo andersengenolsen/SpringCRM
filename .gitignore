@@ -1,0 +1,7 @@
+*.class
+/target
+SpringCRM.iml
+/out
+/lib
+.idea/
+/src/main/resources/persistence.properties
