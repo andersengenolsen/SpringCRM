@@ -60,16 +60,27 @@ public class UserDaoImpl implements UserDao {
         return query.getResultList();
     }
 
+    /**
+     * Deleting a user from the database
+     *
+     * @param id Id of user to delete
+     */
+    @Override
+    public void delete(int id) {
+        Session session = sessionFactory.getCurrentSession();
+        Query query =
+                session.createQuery("delete from User where id=:userId");
+        query.setParameter("userId", id);
+        query.executeUpdate();
+    }
+
+
     // TODO: IMPLEMENT DATABASE CALLS
     @Override
     public User get(int id) {
         return null;
     }
 
-    @Override
-    public void delete(int id) {
-
-    }
 
     @Override
     public void delete(User user) {

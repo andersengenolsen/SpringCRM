@@ -73,16 +73,22 @@ public class UserServiceImpl implements UserService {
         userDao.save(user);
     }
 
+    /**
+     * @param id to delete
+     */
+    @Override
+    @Transactional
+    public void delete(int id) {
+        userDao.delete(id);
+    }
+
+
     // TODO: Implement DB calls!
     @Override
     public User get(int id) {
         return null;
     }
 
-    @Override
-    public void delete(int id) {
-
-    }
 
     @Override
     public void delete(User T) {

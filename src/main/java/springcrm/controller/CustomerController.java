@@ -104,9 +104,7 @@ public class CustomerController extends FormController {
 
     @GetMapping(DELETE_CUSTOMER_URL)
     public String deleteCustomer(@RequestParam("customerId") int id) {
-
         service.delete(id);
-
         return REDIRECT_CUSTOMER_LIST;
     }
 

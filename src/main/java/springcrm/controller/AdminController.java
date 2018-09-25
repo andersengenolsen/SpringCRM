@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import springcrm.entity.User;
 import springcrm.service.UserService;
 import springcrm.user.AppUser;
@@ -20,10 +21,9 @@ public class AdminController extends FormController {
 
     final static String ADMIN_URL = "/admin";
     final static String ADMIN_VIEW = "admin-panel";
+    final static String REDIRECT_ADMIN_VIEW = "redirect:/admin";
     final static String UPDATE_USER_URL = "/user/update-user";
     final static String DELETE_USER_URL = "/user/delete-user";
-
-    private final static String NEW_USER_URL = "/new-user";
 
     @Autowired
     private UserService userService;
@@ -48,8 +48,8 @@ public class AdminController extends FormController {
     }
 
     @GetMapping(DELETE_USER_URL)
-    public String deleteUser() {
-        // TODO: Add view mapping
-        return null;
+    public String deleteUser(@RequestParam("userId") int id) {
+        userService.delete(id);
+        return REDIRECT_ADMIN_VIEW;
     }
 }
