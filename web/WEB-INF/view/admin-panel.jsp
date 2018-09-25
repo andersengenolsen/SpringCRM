@@ -15,6 +15,49 @@
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
 <body>
+<div class="col-md-12">
+    <div class="table-responsive">
+        <table id="customer-list" class="table table-bordered table-striped text-white font-weight-bold">
 
+            <thead>
+            <th>Username</th>
+            <th>Roles</th>
+            <th>Edit</th>
+            <th>Delete</th>
+            </thead>
+
+            <tbody>
+
+            <!-- Looping and printing all customers -->
+            <c:forEach var="user" items="${users}">
+
+                <!-- Creating update link -->
+                <c:url var="updateLink" value="admin/user/update-user">
+                    <c:param name="userId" value="${user.id}"/>
+                </c:url>
+                <!-- Creating delete link -->
+                <c:url var="deleteLink" value="admin/user/delete-user">
+                    <c:param name="userId" value="${user.id}"/>
+                </c:url>
+
+                <tr>
+                    <td>${user.username}</td>
+                    <td>
+                        <c:forEach var="role" items="${user.roles}">
+                            <span> ${role.name} </span>
+                        </c:forEach>
+                    </td>
+                    <td>
+                        <a href="${updateLink}" class="btn btn-sm btn-primary"><i class="far fa-edit"></i></a>
+                    </td>
+                    <td>
+                        <a href="${deleteLink}" class="btn btn-sm btn-danger" id="delete-btn"><i
+                                class="far fa-trash-alt"></i></a>
+                    </td>
+                </tr>
+            </c:forEach>
+            </tbody>
+
+        </table>
 </body>
 </html>
