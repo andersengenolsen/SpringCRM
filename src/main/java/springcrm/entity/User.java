@@ -1,6 +1,5 @@
 package springcrm.entity;
 
-import springcrm.validator.FieldMatch;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
