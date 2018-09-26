@@ -4,6 +4,7 @@ package springcrm.entity;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -41,6 +42,11 @@ public class User {
     @Size(min = 6, message = "is required")
     @Transient
     private String passwordVerif;
+
+    //TODO: Create AppUser class!
+    @Transient
+    private String formRole;
+
 
     /* -- CONSTRUCTORS -- */
 
@@ -101,6 +107,20 @@ public class User {
 
     public void setPasswordVerif(@NotNull String passwordVerif) {
         this.passwordVerif = passwordVerif;
+    }
+
+    public String getFormRole() {
+        return formRole;
+    }
+
+    public void setFormRole(String formRole) {
+        this.formRole = formRole;
+    }
+
+    public void addRole(Role r) {
+        if(roles == null)
+            roles = new ArrayList<>();
+        roles.add(r);
     }
 
     @Override

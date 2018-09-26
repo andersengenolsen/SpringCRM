@@ -20,35 +20,42 @@
     <h3 class="text-center text-white pt-5 text-uppercase">Update / add user</h3>
     <h4 class="text-center text-white pt-3 ">Leave password fields unchanged if only changing username</h4>
     <h5 class="text-center text-white pt-3 ">No worry, they are encrypted</h5>
-    <form:form action="update-user" method="post" modelAttribute="user"
+    <form:form action="update-user" method="post" modelAttribute="model"
                cssClass="text-white font-weight-bold">
 
-        <form:hidden path="id"/>
+        <form:hidden path="user.id"/>
 
         <div class="form-group">
-            <label for="username">Username</label>
-            <form:input path="username" cssClass="form-control"/>
-            <form:errors path="username" cssClass="text-danger"/>
+            <label for="user.username">Username</label>
+            <form:input path="user.username" cssClass="form-control"/>
+            <form:errors path="user.username" cssClass="text-danger"/>
         </div>
 
         <div class="form-group">
-            <label for="password">Password</label>
-            <form:input path="password" cssClass="form-control" type="password"/>
-            <form:errors path="password" cssClass="text-danger"/>
+            <label for="user.password">Password</label>
+            <form:input path="user.password" cssClass="form-control" type="password"/>
+            <form:errors path="user.password" cssClass="text-danger"/>
             <c:if test="${not empty error}">
                 <span class="text-danger">${error}</span>
             </c:if>
         </div>
 
         <div class="form-group">
-            <label for="passwordVerif">Repeat password</label>
-            <form:input path="passwordVerif" cssClass="form-control" type="password"/>
-            <form:errors path="passwordVerif" cssClass="text-danger"/>
+            <label for="user.passwordVerif">Repeat password</label>
+            <form:input path="user.passwordVerif" cssClass="form-control" type="password"/>
+            <form:errors path="user.passwordVerif" cssClass="text-danger"/>
+        </div>
+
+
+        <!-- Roles -->
+        <div style="margin-bottom: 25px" class="input-group">
+            <form:select path="user.formRole" items="${model.allRoles}" class="form-control"/>
         </div>
 
         <input type="submit" class="btn-lg btn-primary" value="Submit"/>
-
     </form:form>
+
+
 </div>
 </body>
 </html>

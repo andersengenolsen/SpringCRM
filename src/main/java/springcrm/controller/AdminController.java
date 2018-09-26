@@ -1,14 +1,22 @@
 package springcrm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import springcrm.entity.Role;
 import springcrm.entity.User;
+import springcrm.model.FormModel;
+import springcrm.service.RoleService;
 import springcrm.service.UserService;
 
+import javax.annotation.PostConstruct;
 import javax.validation.Valid;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -25,14 +33,33 @@ public class AdminController extends FormController {
     final static String UPDATE_USER_URL = "/user/update-user";
     final static String DELETE_USER_URL = "/user/delete-user";
     final static String ADD_USER_URL = "/user/add-user";
-    final static String MODEL_ATTR_USER = "user";
     final static String MODEL_ATTR_USERS = "users";
+    final static String MODEL_ATTR_FORM = "model";
 
     private UserService userService;
 
+    private RoleService roleService;
+
+    private LinkedHashMap<String, Role> allRoles;
+
+    private FormModel formModel;
+
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
+    }
+
+    @PostConstruct
+    protected void setUp() {
+        List<Role> roles = roleService.getAll();
+
+        allRoles = new LinkedHashMap<>();
+
+        for (Role r : roles)
+            allRoles.put(r.getName(), r);
+
+        formModel = new FormModel();
     }
 
     /**
@@ -60,7 +87,9 @@ public class AdminController extends FormController {
         User u = userService.get(id);
         if (u != null)
             u.setPasswordVerif(u.getPassword());
-        model.addAttribute(MODEL_ATTR_USER, u);
+        formModel.setAllRoles(allRoles);
+        formModel.setUser(u);
+        model.addAttribute(MODEL_ATTR_FORM, formModel);
         return USER_FORM_VIEW;
     }
 
@@ -73,7 +102,9 @@ public class AdminController extends FormController {
      */
     @GetMapping(ADD_USER_URL)
     public String showAddUserForm(Model model) {
-        model.addAttribute(MODEL_ATTR_USER, new User());
+        formModel.setUser(new User());
+        formModel.setAllRoles(allRoles);
+        model.addAttribute(MODEL_ATTR_FORM, formModel);
         return USER_FORM_VIEW;
     }
 
@@ -82,20 +113,28 @@ public class AdminController extends FormController {
      * Saving user to the database.
      * If invalid input, form is simply returned
      *
-     * @param user   The user from the form
+     * @param form   The {@link FormModel}
      * @param result result, check for errors
      * @param model  model form
      * @return view
      */
     @PostMapping(UPDATE_USER_URL)
-    public String saveUser(@Valid @ModelAttribute(MODEL_ATTR_USER) User user,
+    public String saveUser(@Valid @ModelAttribute(MODEL_ATTR_FORM) FormModel form,
                            BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute(MODEL_ATTR_USER, user);
+
+        User user = form.getUser();
+
+        if (result.hasErrors() || user.getFormRole() == null) {
+            model.addAttribute(MODEL_ATTR_FORM, user);
             return USER_FORM_VIEW;
         }
+
+        String formRole = user.getFormRole();
+        Role r = allRoles.get(formRole);
+        user.addRole(r);
+
         if (!user.getPassword().equals(user.getPasswordVerif())) {
-            model.addAttribute(MODEL_ATTR_USER, user);
+            model.addAttribute(MODEL_ATTR_FORM, user);
             model.addAttribute("error", "Passwords must match");
             return USER_FORM_VIEW;
         }

@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import springcrm.entity.User;
+import springcrm.service.RoleService;
 import springcrm.service.UserService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,9 +31,12 @@ public class AdminControllerTest {
     @Autowired
     private UserService service;
 
+    @Autowired
+    private RoleService roleService;
+
     @Before
     public void setUp() {
-        controller = new AdminController(service);
+        controller = new AdminController(service, roleService);
         mockMvc = standaloneSetup(controller).build();
     }
 

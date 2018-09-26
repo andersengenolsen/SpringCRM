@@ -63,8 +63,8 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User get(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.get(User.class, id);
+    Session session = sessionFactory.getCurrentSession();
+    return session.get(User.class, id);
     }
 
 
@@ -76,7 +76,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void delete(User user) {
         if (user.getId() == null)
-            throw new IllegalArgumentException("Customer must have valid id");
+            throw new IllegalArgumentException("User must have valid id");
 
         Session session = sessionFactory.getCurrentSession();
         session.delete(user);

@@ -4,6 +4,7 @@ import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springcrm.entity.Customer;
+import springcrm.service.RoleService;
 import springcrm.service.Service;
 import springcrm.service.UserService;
 
@@ -24,6 +25,11 @@ public class ControllerTestContext {
     @Bean
     public UserService userService() {
         return Mockito.mock(UserService.class);
+    }
+
+    @Bean
+    public RoleService roleService() {
+        return Mockito.mock(RoleService.class);
     }
 
 }

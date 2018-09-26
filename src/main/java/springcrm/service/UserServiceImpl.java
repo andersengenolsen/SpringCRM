@@ -71,23 +71,18 @@ public class UserServiceImpl implements UserService {
         if (user.getId() != null) {
             User temp = userDao.get(user.getId());
             // Comparing passwords. If equal, only update username
-            if (temp.getPassword().equals(user.getPassword())) {
+            if (!temp.getPassword().equals(user.getPassword())) {
                 // TODO: Another solution for password verification
                 // Making that stupid "passwordVerif" field I added equal to the password.....
-                temp.setPasswordVerif(temp.getPassword());
-                temp.setUsername(user.getUsername());
-            } else {
-                // Else, encrypt the password and save
                 temp.setPassword(passwordEncoder.encode(user.getPassword()));
-                // Making that stupid "passwordVerif" field I added equal to the password.....
-                temp.setPasswordVerif(temp.getPassword());
-                // Updating username
-                temp.setUsername(user.getUsername());
             }
+            temp.setPasswordVerif(temp.getPassword());
+            temp.setUsername(user.getUsername());
+            temp.setRoles(Arrays.asList(roleDao.findRoleByName(user.getFormRole())));
         } else {
             // No ID, new user
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_user")));
+            user.setRoles(Arrays.asList(roleDao.findRoleByName(user.getFormRole())));
             userDao.save(user);
         }
     }
