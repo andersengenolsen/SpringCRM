@@ -4,6 +4,10 @@ import springcrm.entity.Role;
 
 public interface RoleDao {
 
-    public Role findRoleByName(String theRoleName);
+    /**
+     * @param name role name
+     * @return Role with given name, null if not found
+     */
+    Role findRoleByName(String name);
 
 }

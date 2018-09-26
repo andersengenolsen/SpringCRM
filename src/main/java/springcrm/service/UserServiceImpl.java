@@ -11,7 +11,6 @@ import springcrm.dao.RoleDao;
 import springcrm.dao.UserDao;
 import springcrm.entity.Role;
 import springcrm.entity.User;
-import springcrm.user.AppUser;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -83,26 +82,33 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    // TODO: Implement DB calls!
+    /**
+     * @param id id of user
+     * @return User with given id, null if not  found
+     */
     @Override
     public User get(int id) {
-        return null;
+        return userDao.get(id);
     }
 
-
+    /**
+     * @param u User to delete
+     */
     @Override
-    public void delete(User T) {
-
+    public void delete(User u) {
+        userDao.delete(u);
     }
 
     /**
      * Used to check whether a given username already exists
      *
+     * @return {@link UserDetails} object
      * @throws UsernameNotFoundException
      */
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName)
+            throws UsernameNotFoundException {
         User user = findByUserName(userName);
 
         if (user == null) {

@@ -21,6 +21,7 @@ public class AdminController extends FormController {
 
     final static String ADMIN_URL = "/admin";
     final static String ADMIN_VIEW = "admin-panel";
+    final static String UPDATE_USER_VIEW = "update-user";
     final static String REDIRECT_ADMIN_VIEW = "redirect:/admin";
     final static String UPDATE_USER_URL = "/user/update-user";
     final static String DELETE_USER_URL = "/user/delete-user";
@@ -43,10 +44,16 @@ public class AdminController extends FormController {
 
     @GetMapping(UPDATE_USER_URL)
     public String updateUser() {
-        // TODO: Add view mapping
-        return null;
+        // TODO: Add view!
+        return UPDATE_USER_VIEW;
     }
 
+    /**
+     * Deleting a user from the database
+     *
+     * @param id user id
+     * @return views
+     */
     @GetMapping(DELETE_USER_URL)
     public String deleteUser(@RequestParam("userId") int id) {
         userService.delete(id);

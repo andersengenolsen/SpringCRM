@@ -18,26 +18,6 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-
-    @Override
-    public User findByUserName(String theUserName) {
-        // get the current hibernate session
-        Session currentSession = sessionFactory.getCurrentSession();
-
-        // now retrieve/read from database using username
-        Query<User> theQuery = currentSession.createQuery("from User where username=:uName", User.class);
-        theQuery.setParameter("uName", theUserName);
-
-        User theUser = null;
-        try {
-            theUser = theQuery.getSingleResult();
-        } catch (Exception e) {
-            theUser = null;
-        }
-
-        return theUser;
-    }
-
     /**
      * Saving a new user to the database
      *
@@ -74,16 +54,44 @@ public class UserDaoImpl implements UserDao {
         query.executeUpdate();
     }
 
-
-    // TODO: IMPLEMENT DATABASE CALLS
+    /**
+     * @param id user id
+     * @return user with given id, null if not found
+     */
     @Override
     public User get(int id) {
-        return null;
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(User.class, id);
     }
 
 
+    /**
+     * Deleting a user from the database
+     *
+     * @param user user object to delete
+     */
     @Override
     public void delete(User user) {
+        if (user.getId() == null)
+            throw new IllegalArgumentException("Customer must have valid id");
 
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(user);
+
+    }
+
+    /**
+     * @param username Username to fetch from db
+     * @return User with given username, null if not found
+     */
+    @Override
+    public User findByUserName(String username) {
+        Session currentSession = sessionFactory.getCurrentSession();
+
+        Query<User> q = currentSession
+                .createQuery("from User where username=:uname", User.class);
+        q.setParameter("uname", username);
+
+        return q.getSingleResult();
     }
 }
