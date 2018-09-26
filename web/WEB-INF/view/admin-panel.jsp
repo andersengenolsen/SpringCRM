@@ -59,5 +59,15 @@
             </tbody>
 
         </table>
+        <a href="<c:url value="admin/user/add-user"/>" class="btn btn-primary btn-info btn-lg float-left">New
+            user</a>
+        <!-- Logout button -->
+        <form:form action="${pageContext.request.contextPath}/logout" method="POST">
+            <input type="submit" value="Logout"
+                   class="btn btn-primary btn-danger btn-lg float-right">
+        </form:form>
+    </div>
+</div>
+
 </body>
 </html>

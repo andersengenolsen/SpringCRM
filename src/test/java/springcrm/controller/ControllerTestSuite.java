@@ -10,7 +10,8 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         CustomerControllerTest.class,
         AdminControllerTest.class,
-        LoginControllerTest.class
+        LoginControllerTest.class,
+        AdminControllerTest.class
 })
 public class ControllerTestSuite {
 }

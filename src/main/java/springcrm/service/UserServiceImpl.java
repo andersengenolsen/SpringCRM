@@ -59,17 +59,37 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Encrypting password and saving user to the database
+     * Encrypting password and saving user to the database.
+     * If a user already exists with the given encrypted password, only the username is updated.
      *
      * @param user to save
      */
     @Override
     @Transactional
     public void save(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        //TODO: Add roles!
-        user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_user")));
-        userDao.save(user);
+        // If the user object has an ID, it indicates that we're performing an update.
+        if (user.getId() != null) {
+            User temp = userDao.get(user.getId());
+            // Comparing passwords. If equal, only update username
+            if (temp.getPassword().equals(user.getPassword())) {
+                // TODO: Another solution for password verification
+                // Making that stupid "passwordVerif" field I added equal to the password.....
+                temp.setPasswordVerif(temp.getPassword());
+                temp.setUsername(user.getUsername());
+            } else {
+                // Else, encrypt the password and save
+                temp.setPassword(passwordEncoder.encode(user.getPassword()));
+                // Making that stupid "passwordVerif" field I added equal to the password.....
+                temp.setPasswordVerif(temp.getPassword());
+                // Updating username
+                temp.setUsername(user.getUsername());
+            }
+        } else {
+            // No ID, new user
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_user")));
+            userDao.save(user);
+        }
     }
 
     /**
@@ -87,6 +107,7 @@ public class UserServiceImpl implements UserService {
      * @return User with given id, null if not  found
      */
     @Override
+    @Transactional
     public User get(int id) {
         return userDao.get(id);
     }
@@ -95,6 +116,7 @@ public class UserServiceImpl implements UserService {
      * @param u User to delete
      */
     @Override
+    @Transactional
     public void delete(User u) {
         userDao.delete(u);
     }

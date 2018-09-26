@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import springcrm.entity.User;
 
+import javax.persistence.NoResultException;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ public class UserDaoImpl implements UserDao {
 
     /**
      * Saving a new user to the database
+     * <p>
+     * Updating only username if password hashes are equal (meaning the password is not changed)
      *
      * @param user new user
      */
@@ -77,7 +80,6 @@ public class UserDaoImpl implements UserDao {
 
         Session session = sessionFactory.getCurrentSession();
         session.delete(user);
-
     }
 
     /**
@@ -85,13 +87,18 @@ public class UserDaoImpl implements UserDao {
      * @return User with given username, null if not found
      */
     @Override
-    public User findByUserName(String username) {
+    public User findByUserName(String username) throws NoResultException {
         Session currentSession = sessionFactory.getCurrentSession();
 
         Query<User> q = currentSession
                 .createQuery("from User where username=:uname", User.class);
         q.setParameter("uname", username);
 
-        return q.getSingleResult();
+        try {
+            return q.getSingleResult();
+        } catch (NoResultException err) {
+            return null;
+        }
+
     }
 }
