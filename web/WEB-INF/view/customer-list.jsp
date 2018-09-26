@@ -5,7 +5,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%--
   Created by IntelliJ IDEA.
-  User: anders
+  AppUser: anders
   Date: 13.09.18
   Time: 13:50
   To change this template use File | Settings | File Templates.
@@ -78,7 +78,7 @@
                                 <a href="${updateLink}" class="btn btn-sm btn-primary"><i class="far fa-edit"></i></a>
                             </td>
                             <td>
-                                <a href="${deleteLink}" class="btn btn-sm btn-danger" id="delete-customer"><i
+                                <a href="${deleteLink}" class="btn btn-sm btn-danger" id="delete-btn"><i
                                         class="far fa-trash-alt"></i></a>
                             </td>
                         </tr>
