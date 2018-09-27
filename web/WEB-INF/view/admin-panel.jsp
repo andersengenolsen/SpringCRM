@@ -43,9 +43,7 @@
                 <tr>
                     <td>${user.username}</td>
                     <td>
-                        <c:forEach var="role" items="${user.roles}">
-                            <span> ${role.name} </span>
-                        </c:forEach>
+                        <span>${user.formRole}</span>
                     </td>
                     <td>
                         <a href="${updateLink}" class="btn btn-sm btn-primary"><i class="far fa-edit"></i></a>

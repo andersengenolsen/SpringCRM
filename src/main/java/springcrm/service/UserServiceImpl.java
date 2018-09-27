@@ -70,19 +70,17 @@ public class UserServiceImpl implements UserService {
         // If the user object has an ID, it indicates that we're performing an update.
         if (user.getId() != null) {
             User temp = userDao.get(user.getId());
-            // Comparing passwords. If equal, only update username
+            // Comparing passwords. If not equal, update the password
             if (!temp.getPassword().equals(user.getPassword())) {
-                // TODO: Another solution for password verification
-                // Making that stupid "passwordVerif" field I added equal to the password.....
                 temp.setPassword(passwordEncoder.encode(user.getPassword()));
             }
-            temp.setPasswordVerif(temp.getPassword());
+
             temp.setUsername(user.getUsername());
-            temp.setRoles(Arrays.asList(roleDao.findRoleByName(user.getFormRole())));
+            temp.setRole(roleDao.get(user.getRole().getId()));
+
         } else {
             // No ID, new user
             user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setRoles(Arrays.asList(roleDao.findRoleByName(user.getFormRole())));
             userDao.save(user);
         }
     }
@@ -133,7 +131,7 @@ public class UserServiceImpl implements UserService {
         }
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+                mapRolesToAuthorities(Arrays.asList(user.getRole())));
     }
 
     /**

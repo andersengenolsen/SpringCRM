@@ -1,11 +1,12 @@
 package springcrm.entity;
 
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Entity class representing a User of the application, used for registration through the admin panel.
@@ -29,24 +30,10 @@ public class User {
     @Column(name = "password", columnDefinition = "char(68)")
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "users_has_role",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
-
-    /**
-     * This field is NOT a column in the database table!
-     */
-    @NotNull(message = "is required")
-    @Size(min = 6, message = "is required")
-    @Transient
-    private String passwordVerif;
-
-    //TODO: Create AppUser class!
-    @Transient
-    private String formRole;
-
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Role role;
 
     /* -- CONSTRUCTORS -- */
 
@@ -58,10 +45,10 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password, Collection<Role> roles) {
+    public User(String username, String password, Role role) {
         this.username = username;
         this.password = password;
-        this.roles = roles;
+        this.role = role;
     }
 
     /* -- GETTERS AND SETTERS -- */
@@ -92,35 +79,12 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(Collection<Role> roles) {
-        this.roles = roles;
-    }
-
-    @NotNull
-    public String getPasswordVerif() {
-        return passwordVerif;
-    }
-
-    public void setPasswordVerif(@NotNull String passwordVerif) {
-        this.passwordVerif = passwordVerif;
-    }
-
-    public String getFormRole() {
-        return formRole;
-    }
-
-    public void setFormRole(String formRole) {
-        this.formRole = formRole;
-    }
-
-    public void addRole(Role r) {
-        if(roles == null)
-            roles = new ArrayList<>();
-        roles.add(r);
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @Override
@@ -129,7 +93,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", roles=" + roles +
+                ", roles=" + role +
                 '}';
     }
 }
