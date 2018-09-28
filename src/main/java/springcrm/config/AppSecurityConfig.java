@@ -61,9 +61,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/**")
-                .denyAll()
-                .antMatchers("/").hasAnyRole(ROLE_USER, ROLE_ADMIN)
+                .antMatchers("/**").hasAnyRole(ROLE_USER, ROLE_ADMIN)
                 .antMatchers("/admin/**").hasRole(ROLE_ADMIN)
                 .and()
                 .formLogin()
