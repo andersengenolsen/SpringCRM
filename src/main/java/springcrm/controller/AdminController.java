@@ -1,9 +1,11 @@
 package springcrm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import springcrm.entity.Role;
 import springcrm.entity.User;
@@ -22,16 +24,16 @@ import java.util.List;
  * Controller for /admin.
  */
 @Controller
-@RequestMapping("/admin")
-public class AdminController extends FormController {
+@RequestMapping("/admin/")
+public class AdminController {
 
-    final static String ADMIN_URL = "/admin";
+    final static String ADMIN_URL = "/admin/";
     final static String ADMIN_VIEW = "admin-panel";
     private final static String USER_FORM_VIEW = "user-form";
-    private final static String REDIRECT_ADMIN_VIEW = "redirect:/admin";
-    private final static String UPDATE_USER_URL = "/user/update-user";
-    private final static String DELETE_USER_URL = "/user/delete-user";
-    private final static String ADD_USER_URL = "/user/add-user";
+    private final static String REDIRECT_ADMIN_VIEW = "redirect:/admin/";
+    private final static String UPDATE_USER_URL = "user/update-user";
+    private final static String DELETE_USER_URL = "user/delete-user";
+    private final static String ADD_USER_URL = "user/add-user";
     private final static String MODEL_ATTR_USERS = "users";
     private final static String MODEL_ATTR_FORM = "model";
 
@@ -223,5 +225,15 @@ public class AdminController extends FormController {
             list.add(appUserFromUser(u));
 
         return list;
+    }
+
+    /**
+     * Pre processing all web requests.
+     * Stripping whitespace from Strings.
+     * Only whitespace will be changed to null.
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
     }
 }

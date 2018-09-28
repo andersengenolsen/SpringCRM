@@ -35,7 +35,7 @@
                     property="principal.username"/></p>
             <!-- Link to Admin panel, only visibile for admin users -->
             <security:authorize access="hasRole('admin')">
-                <a href="${pageContext.request.contextPath}/admin" class="btn btn-primary btn-info btn-lg float-right">Admin
+                <a href="${pageContext.request.contextPath}/admin/" class="btn btn-primary btn-info btn-lg float-right">Admin
                     panel</a>
             </security:authorize>
         </div>

@@ -2,10 +2,12 @@ package springcrm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import springcrm.entity.Customer;
 import springcrm.service.Service;
@@ -19,7 +21,7 @@ import java.util.List;
 @Controller
 @Component
 @RequestMapping("/customer")
-public class CustomerController extends FormController {
+public class CustomerController {
 
     /**
      * Attribute name for a customer.
@@ -125,4 +127,15 @@ public class CustomerController extends FormController {
 
         return ADD_CUSTOMER_VIEW;
     }
+
+    /**
+     * Pre processing all web requests.
+     * Stripping whitespace from Strings.
+     * Only whitespace will be changed to null.
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
+    }
+
 }
