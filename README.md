@@ -1,6 +1,6 @@
 # SpringCRM
 
-Live version of the application: 
+Live version of the application (not optimized for mobile):
 
 http://webapps.andersengenolsen.com:8080/SpringCRM_war/
 
