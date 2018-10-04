@@ -1,6 +1,7 @@
 # SpringCRM
 
-Live version of the application: webapps.andersengenolsen.com:8080/SpringCRM_war/
+Live version of the application: 
+(webapps.andersengenolsen.com:8080/SpringCRM_war/)
 
 Application built with Spring MVC.
 
