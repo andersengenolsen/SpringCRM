@@ -32,11 +32,11 @@
             <c:forEach var="user" items="${users}">
 
                 <!-- Creating update link -->
-                <c:url var="updateLink" value="${pageContext.request.contextPath}/admin/user/update-user">
+                <c:url var="updateLink" value="/admin/user/update-user">
                     <c:param name="userId" value="${user.id}"/>
                 </c:url>
                 <!-- Creating delete link -->
-                <c:url var="deleteLink" value="${pageContext.request.contextPath}/admin/user/delete-user">
+                <c:url var="deleteLink" value="/admin/user/delete-user">
                     <c:param name="userId" value="${user.id}"/>
                 </c:url>
 
@@ -57,7 +57,7 @@
             </tbody>
 
         </table>
-        <a href="<c:url value="${pageContext.request.contextPath}/admin/user/add-user"/>" class="btn btn-primary btn-info btn-lg float-left">New
+        <a href="<c:url value="/admin/user/add-user"/>" class="btn btn-primary btn-info btn-lg float-left">New
             user</a>
         <!-- Logout button -->
         <form:form action="${pageContext.request.contextPath}/logout" method="POST">
