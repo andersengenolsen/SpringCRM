@@ -2,7 +2,7 @@
 
 Live version of the application (not optimized for mobile):
 
-http://webapps.andersengenolsen.com:8080/SpringCRM_war/
+https://webapps.andersengenolsen.com/SpringCRM_war/login
 
 Application built with Spring MVC.
 
