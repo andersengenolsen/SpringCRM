@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import springcrm.converter.Converter;
 import springcrm.entity.Role;
 import springcrm.entity.User;
 import springcrm.model.AppUser;
@@ -15,6 +16,7 @@ import springcrm.service.RoleService;
 import springcrm.service.UserService;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.Convert;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -52,6 +54,12 @@ public class AdminController {
      */
     private LinkedHashMap<String, Role> allRoles;
 
+    @Autowired
+    private Converter<AppUser, User> userFromAppuser;
+
+    @Autowired
+    private Converter<User, AppUser> appUserFromUser;
+
     /**
      * {@link FormModel}
      */
@@ -61,6 +69,7 @@ public class AdminController {
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
+
     }
 
     /**
@@ -101,7 +110,10 @@ public class AdminController {
      */
     @GetMapping(UPDATE_USER_URL)
     public String showUpdateForm(@RequestParam("userId") int id, Model model) {
-        AppUser u = appUserFromUser(userService.get(id));
+
+        User user = userService.get(id);
+
+        AppUser u = appUserFromUser.convert(user);
 
         if (u != null)
             u.setPasswordVerif(u.getPassword());
@@ -156,7 +168,8 @@ public class AdminController {
             return USER_FORM_VIEW;
         }
 
-        User user = userFromAppUser(appUser);
+        User user = userFromAppuser.convert(appUser);
+        user.setRole(allRoles.get(appUser.getFormRole()));
 
         userService.save(user);
         return REDIRECT_ADMIN_VIEW;
@@ -175,45 +188,6 @@ public class AdminController {
     }
 
     /**
-     * Converting AppUser to User
-     *
-     * @param appUser {@link AppUser}
-     * @return User
-     */
-    private User userFromAppUser(AppUser appUser) {
-        User user = new User();
-        user.setPassword(appUser.getPassword());
-        user.setUsername(appUser.getUsername());
-        user.setRole(allRoles.get(appUser.getFormRole()));
-
-        if (appUser.getId() != null)
-            user.setId(appUser.getId());
-
-
-        return user;
-    }
-
-    /**
-     * Converting User to AppUser
-     *
-     * @param user {@link User}
-     * @return
-     */
-    private AppUser appUserFromUser(User user) {
-        AppUser appUser = new AppUser();
-        appUser.setPassword(user.getPassword());
-        appUser.setPasswordVerif(user.getPassword());
-        appUser.setUsername(user.getUsername());
-
-        appUser.setFormRole(user.getRole().getName());
-
-        if (user.getId() != null)
-            appUser.setId(user.getId());
-
-        return appUser;
-    }
-
-    /**
      * Converting list of User to Appuser
      *
      * @param users
@@ -223,7 +197,7 @@ public class AdminController {
         List<AppUser> list = new ArrayList<>();
 
         for (User u : users)
-            list.add(appUserFromUser(u));
+            list.add(appUserFromUser.convert(u));
 
         return list;
     }
