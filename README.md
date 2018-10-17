@@ -2,8 +2,6 @@
 
 Live version of the application (not optimized for mobile):
 
-https://webapps.andersengenolsen.com/SpringCRM_war/login
-
 Application built with Spring MVC.
 
 Simple CRM application. User must authenticate (Spring Security), before adding / deleting customers. Customers are saved to a MySQL database.
